@@ -26,6 +26,7 @@ class VideoCreator:
         self.tags = video.get('tags', list())
         self.outro = video.get('outro', '')
         self.path = Path(media_folder).absolute()
+        self.gif_file = str(Path('subscribe.gif').absolute())
 
     def download_video(self, folder='background'):
         youtube_download(url=self.args.url, folder=folder)
@@ -83,7 +84,7 @@ class VideoCreator:
 
     def integrate_subtitles(self):
         final_video = prepare_background(
-            self.mp4_background, filename_mp3=self.mp3_file, filename_srt=self.ass_file, verbose=self.args.verbose)
+            self.mp4_background, filename_mp3=self.mp3_file, filename_srt=self.ass_file, filename_gif=self.gif_file, verbose=self.args.verbose)
         final_video = Path(final_video).absolute()
 
         self.mp4_final_video = final_video

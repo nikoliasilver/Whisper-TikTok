@@ -5,10 +5,12 @@ import random
 
 from utils import *
 
+from moviepy.editor import VideoFileClip, CompositeVideoClip
+
 HOME = Path.cwd()
 
 
-def prepare_background(background_mp4: str, filename_mp3: str, filename_srt: str, verbose: bool = False) -> str:
+def prepare_background(background_mp4: str, filename_mp3: str, filename_srt: str, filename_gif: str, verbose: bool = False) -> str:
     video_info = get_info(background_mp4, kind='video')
     video_duration = int(round(video_info.get('duration'), 0))
 
@@ -34,6 +36,10 @@ def prepare_background(background_mp4: str, filename_mp3: str, filename_srt: str
         rich_print(
             f"{filename_srt = }\n{background_mp4 = }\n{filename_mp3 = }\n", style='bold green')
 
+    # Subscribe GIF
+    gif_duration = get_info(filename_gif, kind='video').get('duration')
+    gif_start_time = video_duration - gif_duration
+
     args = [
         "ffmpeg",
         "-ss", str(ss),
@@ -58,5 +64,16 @@ def prepare_background(background_mp4: str, filename_mp3: str, filename_srt: str
     with KeepDir() as keep_dir:
         keep_dir.chdir(srt_path)
         subprocess.run(args, check=True)
+
+    # Load the extracted video, gif, and audio
+    video = VideoFileClip(outfile)
+    gif = VideoFileClip(filename_gif)
+
+    # Overlay the gif onto the video
+    final_video = CompositeVideoClip([video, gif])
+
+    # Write the result to a file
+    final_video.write_videofile(outfile, codec='libx264',
+                                audio_codec='aac', remove_temp=True, threads=multiprocessing.cpu_count())
 
     return outfile
