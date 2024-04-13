@@ -45,13 +45,13 @@ def get_random_submission(*args, **kwargs):
 
 # Streamlit Config
 st.set_page_config(
-    page_title="Whisper-TikTok",
+    page_title="Whisper",
     page_icon="💬",
     layout="wide",
     initial_sidebar_state="expanded",
     menu_items={
-        'Get Help': 'https://github.com/MatteoFasulo/Whisper-TikTok',
-        'Report a bug': "https://github.com/MatteoFasulo/Whisper-TikTok/issues",
+        'Get Help': 'https://',
+        'Report a bug': "https://",
         'About':
             """
             # Whisper-TikTok
@@ -82,7 +82,7 @@ with st.sidebar:
     user_agent = st.text_input(label='Reddit User Agent')
 
 
-st.title("🏆 Whisper-TikTok 🚀")
+st.title("🏆 Whisper 🚀")
 st.subheader('Reddit section')
 st.write("""
     This section allows you to generate videos from subreddits.""")
